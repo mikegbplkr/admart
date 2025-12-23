@@ -3,60 +3,100 @@
 <head>
   <meta charset="UTF-8" />
   <title>Media Map Platform</title>
-  <link rel="stylesheet" href="./css/style.css" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+
+<body class="h-screen overflow-hidden font-sans">
 
 <!-- TOP BAR -->
-<header class="topbar">
-  <div class="logo">광고플레이</div>
+<header class="h-[60px] flex items-center gap-4 px-4 bg-[#143c8c] text-white">
+  <div class="font-bold text-lg">Ad Mart</div>
 
-  <input class="search" placeholder="Please search for the media you want" />
+  <input
+    id="searchInput"
+    class="flex-1 px-4 py-2 rounded-full text-black outline-none"
+    placeholder="Please search for the media you want"
+  /> 
 
-  <div class="filters">
-    <button class="active">Entire</button>
-    <button>Building</button>
-    <button>Traffic</button>
-    <button>Shopping</button>
-    <button>Life</button>
+  <div class="flex gap-2">
+    <button class="px-4 py-1 rounded-full bg-blue-600 text-white">Entire</button>
+    <button class="px-4 py-1 rounded-full bg-white text-black">Building</button>
+    <button class="px-4 py-1 rounded-full bg-white text-black">Traffic</button>
+    <button class="px-4 py-1 rounded-full bg-white text-black">Shopping</button>
+    <button class="px-4 py-1 rounded-full bg-white text-black">Life</button>
   </div>
 </header>
 
-<!-- MAIN -->
-<div class="layout">
-  <!-- LEFT LIST -->
-  <aside id="sidebar"></aside>
+<!-- MAIN LAYOUT -->
+<div class="flex h-[calc(100vh-60px)]">
+
+  <!-- SIDEBAR -->
+  <aside
+    id="sidebar"
+    class="w-[360px] overflow-y-auto border-r border-gray-200 bg-white"
+  >
+    <!-- Cards injected by JS -->
+  </aside>
 
   <!-- MAP -->
-  <div id="map"></div>
+  <div class="flex-1">
+    <iframe
+      id="map-frame"
+      class="w-full h-full border-0"
+      loading="lazy"
+      allowfullscreen>
+    </iframe>
+  </div>
 
-    <div className="aspect-[4/3] bg-gray-100 relative">
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3183.612123345085!2d126.9690720757498!3d37.55460322481248!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca3e3564c132f%3A0xe51f94b3ae4bff12!2sSeoul%20Station!5e1!3m2!1sen!2sph!4v1766412810454!5m2!1sen!2sph"
-  
-                     width="100%"
-                      height="100%" 
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="GBPL Office Location"
-                      className="w-full h-full" />
-                  </div>
-<!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3183.612123345085!2d126.9690720757498!3d37.55460322481248!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca3e3564c132f%3A0xe51f94b3ae4bff12!2sSeoul%20Station!5e1!3m2!1sen!2sph!4v1766412810454!5m2!1sen!2sph"
-  
-  
-  width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-  ></iframe> -->
-  <!-- <iframe 
-    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d15900.060586714446!2d124.16431945000001!3d8.1721444!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sph!4v1766411497640!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-
-  </iframe> -->
 </div>
 
-<!-- GOOGLE MAP -->
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
-<script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+<!-- MODAL (AUTO OPEN) -->
+<div
+  id="modal"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+>
+  <div
+    class="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative"
+    onclick="event.stopPropagation()"
+  >
+    <!-- Close -->
+    <button
+      onclick="closeModal()"
+      class="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+    >
+      ✕
+    </button>
+
+    <h2 class="text-xl font-semibold mb-4">Welcome</h2>
+    <p class="text-gray-600 mb-6">
+      This modal opens automatically using Tailwind CSS.
+    </p>
+
+    <div class="flex justify-end gap-2">
+      <button
+        onclick="closeModal()"
+        class="px-4 py-2 rounded border"
+      >
+        Close
+      </button>
+      <button class="px-4 py-2 rounded bg-blue-600 text-white">
+        Confirm
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- JS -->
 <script src="./js/script.js"></script>
+
+<script>
+  // Modal opens by default
+  function closeModal() {
+    document.getElementById("modal").classList.add("hidden");
+  }
+</script>
 
 </body>
 </html>
