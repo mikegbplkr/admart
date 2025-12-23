@@ -1,7 +1,7 @@
 const locations = [
-  { id: 1, title: "Gangnam Station", lat: 37.4979, lng: 127.0276, desc: "High traffic commercial district", img: "https://via.placeholder.com/50/ff0000/fff?text=G" },
-  { id: 2, title: "Gyeongbokgung", lat: 37.5796, lng: 126.9770, desc: "Tourist landmark", img: "https://via.placeholder.com/50/00ff00/fff?text=G" },
-  { id: 3, title: "Incheon Airport", lat: 37.4602, lng: 126.4407, desc: "International airport", img: "https://via.placeholder.com/50/0000ff/fff?text=I" }
+  { id: 1, title: "Gangnam Station", lat: 37.4979, lng: 127.0276, desc: "High traffic commercial district", img: "https://english.seoul.go.kr/wp-content/uploads/2016/03/gangnam_07.jpg" },
+  { id: 2, title: "Gyeongbokgung", lat: 37.5796, lng: 126.9770, desc: "Tourist landmark", img: "https://www.ourbigjourney.com/wp-content/uploads/2023/04/DSC09561.jpg" },
+  { id: 3, title: "Incheon Airport", lat: 37.4602, lng: 126.4407, desc: "International airport", img: "https://airssist.com/wp-content/uploads/2023/05/Incheon-Airport-Photo-798x798.jpg" }
 ];
 
 const sidebar = document.getElementById("sidebar");
@@ -15,8 +15,29 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(map);
 
 // Marker cluster group
-const markerCluster = L.markerClusterGroup();
+// const markerCluster = L.markerClusterGroup();
+// map.addLayer(markerCluster);
+const markerCluster = L.markerClusterGroup({
+  iconCreateFunction: function (cluster) {
+    const count = cluster.getChildCount();
+
+    return L.divIcon({
+      html: `
+        <div class="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold shadow">
+          ${count}
+        </div>
+      `,
+      className: "custom-cluster-icon",
+      iconSize: L.point(40, 40)
+    });
+  }
+});
+
 map.addLayer(markerCluster);
+
+
+
+
 
 // Keep track of markers
 let allMarkers = [];
@@ -36,8 +57,20 @@ function renderCards(data) {
   data.forEach(loc => {
     // Sidebar card
     const card = document.createElement("div");
-    card.className = "p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition";
-    card.innerHTML = `<h4 class="font-semibold">${loc.title}</h4><p class="text-sm text-gray-600">${loc.desc}</p>`;
+    // card.className = "p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition flex flex-col gap-2";
+    card.className = "p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition transform hover:scale-102 flex flex-col gap-2";
+
+    card.innerHTML = `
+      <div class="overflow-hidden rounded">
+        <img src="${loc.img}" alt="${loc.title}" 
+          class="w-full h-42 object-cover transition-transform duration-300 ease-in-out hover:scale-105" />
+      </div>
+      <div>
+        <h4 class="font-semibold">${loc.title}</h4>
+        <p class="text-sm text-gray-600">${loc.desc}</p> 
+      </div>
+    `;
+
 
     card.addEventListener("click", () => {
       map.setView([loc.lat, loc.lng], 14);
@@ -67,7 +100,7 @@ function renderCards(data) {
 
     const marker = L.marker([loc.lat, loc.lng], { icon: customIcon })
       .bindPopup(popupContent, { minWidth: 220 });
-
+    marker.__location = loc; 
     markerCluster.addLayer(marker);
     allMarkers.push(marker);
 
